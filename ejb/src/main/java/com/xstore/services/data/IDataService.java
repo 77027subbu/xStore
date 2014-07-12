@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import com.xstore.services.entity.Account;
 import com.xstore.services.entity.Order;
+import com.xstore.services.exception.XStoreException;
 
 @Local
 public interface IDataService {
@@ -17,7 +18,7 @@ public interface IDataService {
 	 * @param clientId
 	 * @return
 	 */
-	public Account findAccount(String accountName, String clientId);
+	public Account findAccount(String accountName, String clientId) throws XStoreException;
 	
 	/**
 	 * This method returns the Order detail given an accountName
@@ -26,5 +27,5 @@ public interface IDataService {
 	 * @param clientId
 	 * @return
 	 */
-	public List<Order> findOrder(String accountName, String clientId);
+	public List<Order> findOrder(String accountName, String clientId) throws XStoreException;
 }

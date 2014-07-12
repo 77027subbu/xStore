@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import com.xstore.services.data.IDataService;
 import com.xstore.services.entity.Account;
 import com.xstore.services.entity.Order;
+import com.xstore.services.exception.XStoreException;
 
 /**
  * Session Bean implementation class DataService
@@ -39,7 +41,7 @@ private final static Logger logger = Logger.getLogger(DataService.class.getName(
 	 * @param clientId
 	 * @return
 	 */
-	public Account findAccount(String accountName, String clientId) {
+	public Account findAccount(String accountName, String clientId) throws XStoreException{
 		Account account = null;
 		logger.info("accountName - " + accountName);
 		logger.info("clientId - " + clientId);
@@ -49,9 +51,14 @@ private final static Logger logger = Logger.getLogger(DataService.class.getName(
 			qry.setParameter("clientId", clientId);
 			account = qry.getSingleResult();
 			logger.info("Number of records fetched - " + account);
+		} catch(NoResultException e) {
+			logger.severe("Error occured - " + e.getMessage());
+			logger.severe("Stacktrace - \n" + ExceptionUtils.getStackTrace(e));
+			throw new XStoreException("CLIENT_ACCOUNT_NOT_FOUND");
 		} catch(Exception e) {
 			logger.severe("Error occured - " + e.getMessage());
 			logger.severe("Stacktrace - \n" + ExceptionUtils.getStackTrace(e));
+			throw new XStoreException(e.getMessage(),e.getCause());
 		}
 		return account;
 	}
@@ -63,7 +70,7 @@ private final static Logger logger = Logger.getLogger(DataService.class.getName(
 	 * @param clientId
 	 * @return
 	 */
-	public List<Order> findOrder(String accountName, String clientId) {
+	public List<Order> findOrder(String accountName, String clientId) throws XStoreException{
 		List<Order> orders = null;
 		logger.info("accountName - " + accountName);
 		logger.info("clientId - " + clientId);
@@ -73,9 +80,14 @@ private final static Logger logger = Logger.getLogger(DataService.class.getName(
 			qry.setParameter("clientId", clientId);
 			orders = qry.getResultList();
 			logger.info("Number of records fetched - " + orders.size());
+		} catch(NoResultException e) {
+			logger.severe("Error occured - " + e.getMessage());
+			logger.severe("Stacktrace - \n" + ExceptionUtils.getStackTrace(e));
+			throw new XStoreException("CLIENT_ACCOUNT_NOT_FOUND");
 		} catch(Exception e) {
 			logger.severe("Error occured - " + e.getMessage());
 			logger.severe("Stacktrace - \n" + ExceptionUtils.getStackTrace(e));
+			throw new XStoreException(e.getMessage(),e.getCause());
 		}
 		return orders;
 	}

@@ -3,6 +3,12 @@
  */
 package com.xstore.services.web.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,9 +16,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author subbu
  *
  */
+
+@XmlRootElement(namespace = "http://xstore.com/wsdl", name = "GetAccountRequest")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(namespace = "http://xstore.com/wsdl", name = "", propOrder= {"clientId","accountId"})
 public class GetAccountRequest {
 	
+	@XmlElement(required = true, nillable=false)
 	private String clientId;
+	
+	@XmlElement(required = true, nillable=false)
 	private String accountId;
 	
 	/**

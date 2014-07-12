@@ -9,6 +9,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
+import com.xstore.services.exception.XStoreException;
 import com.xstore.services.web.model.GetAccountRequest;
 import com.xstore.services.web.model.GetAccountResponse;
 
@@ -23,9 +24,9 @@ public interface IWebServices {
 	 * @return
 	 */
 	@WebResult(name = "GetAccountResponse", targetNamespace = "")
-	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl", className = "com.xstore.ws.client.GetAccountDetail")
+	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl")
 	@WebMethod(operationName = "GetAccountDetail")
-	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl", className = "com.xstore.ws.client.GetAccountDetailResponse")
+	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl")
 	public GetAccountResponse GetAccountDetail(
-			@WebParam(name = "GetAccountRequest", targetNamespace = "http://xstore.com/wsdl") GetAccountRequest getAccountRequest);
+			@WebParam(name = "GetAccountRequest", targetNamespace = "http://xstore.com/wsdl") GetAccountRequest getAccountRequest) throws XStoreException;
 }

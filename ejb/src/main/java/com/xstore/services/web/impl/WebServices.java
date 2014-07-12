@@ -18,7 +18,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import com.xstore.services.data.IDataService;
 import com.xstore.services.entity.Account;
 import com.xstore.services.entity.Order;
+import com.xstore.services.exception.XStoreException;
 import com.xstore.services.web.IWebServices;
+import com.xstore.services.web.fault.XStoreFault;
 import com.xstore.services.web.model.GetAccountRequest;
 import com.xstore.services.web.model.GetAccountResponse;
 
@@ -42,7 +44,7 @@ public class WebServices implements IWebServices {
 	public WebServices() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	/**
 	 * This method returns the Account details of a given client and account
 	 * 
@@ -50,11 +52,11 @@ public class WebServices implements IWebServices {
 	 * @return
 	 */
 	@WebResult(name = "GetAccountResponse", targetNamespace = "")
-	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl", className = "com.xstore.ws.client.GetAccountDetail")
+	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl")
 	@WebMethod(operationName = "GetAccountDetail")
-	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl", className = "com.xstore.ws.client.GetAccountDetailResponse")
+	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl")
 	public GetAccountResponse GetAccountDetail(
-			@WebParam(name = "GetAccountRequest", targetNamespace = "http://xstore.com/wsdl") GetAccountRequest getAccountRequest) {
+			@WebParam(name = "GetAccountRequest", targetNamespace = "http://xstore.com/wsdl") GetAccountRequest getAccountRequest) throws XStoreException {
 		GetAccountResponse gResponse = new GetAccountResponse();
 		logger.info("Request - " + getAccountRequest);
 		try {
@@ -71,11 +73,18 @@ public class WebServices implements IWebServices {
 			gResponse.setAccountName(account.getAccountName());
 			gResponse.setClientId(clientID);
 			gResponse.setOrderCount(String.valueOf(orders.size()));
+		} catch (XStoreException e) {
+			throw new XStoreException(XStoreFault.getInstance(
+					"CLIENT_ACCOUNT_NOT_FOUND",
+					"Client or Account details not found"));
 		} catch (Exception e) {
 			logger.severe("Error occured - " + e.getMessage());
 			logger.severe("Stacktrace - \n" + ExceptionUtils.getStackTrace(e));
+			throw new XStoreException(e.getMessage(),
+					ExceptionUtils.getRootCauseMessage(e));
 		}
 
 		return gResponse;
 	}
+
 }
