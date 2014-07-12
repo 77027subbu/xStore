@@ -24,9 +24,9 @@ public interface IWebServices {
 	 * @return
 	 */
 	@WebResult(name = "GetAccountResponse", targetNamespace = "")
-	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl")
+	@RequestWrapper(localName = "GetAccountDetailRequest", targetNamespace = "http://xstore.com/wsdl", className="com.xstore.services.web.model.GetAccountDetailRequest")
 	@WebMethod(operationName = "GetAccountDetail")
-	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl")
+	@ResponseWrapper(localName = "GetAccountDetailResponse", targetNamespace = "http://xstore.com/wsdl", className="com.xstore.services.web.model.GetAccountDetailResponse")
 	public GetAccountResponse GetAccountDetail(
 			@WebParam(name = "GetAccountRequest", targetNamespace = "http://xstore.com/wsdl") GetAccountRequest getAccountRequest) throws XStoreException;
 }
